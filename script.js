@@ -52,3 +52,20 @@ class Stopwatch {
         clearInterval(this.watch);
     }
 }
+
+function pad0(value) {
+    let result = value.toString();
+    
+    if (result.length < 2) {
+        result = '0' + result;
+    }
+    return result;
+}
+
+const startButton = document.getElementById('start');
+startButton.addEventListener('click', () => stopwatch.start());
+
+const stopButton = document.getElementById('stop');
+stopButton.addEventListener('click', () => stopwatch.stop());
+
+const stopwatch = new Stopwatch(document.querySelector('.stopwatch'));
