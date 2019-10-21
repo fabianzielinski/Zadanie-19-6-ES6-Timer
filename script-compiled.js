@@ -1,35 +1,98 @@
-"use strict";
+'use strict';
 
-// zadanie 1
-var a = "Hello";
-var b = "World";
-console.log(a + " " + b);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-// zadanie 2
-var multiply = function multiply() {
-  var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-  var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-  return console.log(a * b);
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// zadanie 3
-var average = function average() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
+var Stopwatch = function () {
+    function Stopwatch(display) {
+        _classCallCheck(this, Stopwatch);
 
-  return console.log(args.reduce(function (total, arg) {
-    return total + arg;
-  }) / args.length);
-};
+        this.running = false;
+        this.display = display;
+        this.reset();
+        this.print(this.times);
+    }
 
-// zadanie 4
-var grades = [1, 5, 5, 5, 4, 3, 3, 2, 1];
-average.apply(undefined, grades);
+    _createClass(Stopwatch, [{
+        key: 'reset',
+        value: function reset() {
+            this.times = {
+                minutes: 0,
+                seconds: 0,
+                miliseconds: 0
+            };
+        }
+    }, {
+        key: 'print',
+        value: function print() {
+            this.display.innerText = this.format(this.times);
+        }
+    }, {
+        key: 'format',
+        value: function format(times) {
+            return pad0(times.minutes) + ':' + pad0(times.seconds) + ':' + pad0(Math.floor(times.miliseconds));
+        }
+    }, {
+        key: 'start',
+        value: function start() {
+            var _this = this;
 
-// zadanie 5
-var array = [1, 4, "Iwona", false, "Nowak"];
-var firstname = array[2],
-    lastname = array[4];
+            if (!this.running) {
+                this.running = true;
+                this.watch = setInterval(function () {
+                    return _this.step();
+                }, 10);
+            }
+        }
+    }, {
+        key: 'step',
+        value: function step() {
+            if (!this.running) return;
+            this.calculate();
+            this.print();
+        }
+    }, {
+        key: 'calculate',
+        value: function calculate() {
+            this.times.miliseconds += 1;
+            if (this.times.miliseconds >= 100) {
+                this.times.seconds += 1;
+                this.times.miliseconds = 0;
+            }
+            if (this.times.seconds >= 60) {
+                this.times.minutes += 1;
+                this.times.seconds = 0;
+            }
+        }
+    }, {
+        key: 'stop',
+        value: function stop() {
+            this.running = false;
+            clearInterval(this.watch);
+        }
+    }]);
 
-console.log(firstname + " " + lastname);
+    return Stopwatch;
+}();
+
+function pad0(value) {
+    var result = value.toString();
+
+    if (result.length < 2) {
+        result = '0' + result;
+    }
+    return result;
+}
+
+var startButton = document.getElementById('start');
+startButton.addEventListener('click', function () {
+    return stopwatch.start();
+});
+
+var stopButton = document.getElementById('stop');
+stopButton.addEventListener('click', function () {
+    return stopwatch.stop();
+});
+
+var stopwatch = new Stopwatch(document.querySelector('.stopwatch'));
