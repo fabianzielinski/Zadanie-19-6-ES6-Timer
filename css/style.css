@@ -1,6 +1,6 @@
 body {
-  background-color: grey;
-  color: lightgray !important;
+  background-color: #808080;
+  color: #d3d3d3;
 }
 
 body .container {
@@ -15,8 +15,8 @@ body .container .controls {
 }
 
 body .container .controls .button {
-  text-decoration-line: none !important;
-  color: lightgray !important;
+  text-decoration-line: none;
+  color: #d3d3d3;
   margin: 10px;
 }
 
